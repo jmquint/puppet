@@ -1,4 +1,5 @@
- node 'git' {
+node 'git' {
+
 
 
 
@@ -8,4 +9,4 @@
     content => "It works !\n",
   }
 
-# }
+ }
