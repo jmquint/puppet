@@ -1,8 +1,11 @@
 #!/bin/sh
 
+
 syntax_errors=0
 error_msg=$(mktemp /tmp/error_msg.XXXXXX)
 
+echo "=== git rev-parse --quiet --verify HEAD"
+git rev-parse --quiet --verify HEAD
 if git rev-parse --quiet --verify HEAD > /dev/null
 then
     against=HEAD
@@ -10,25 +13,25 @@ else
     # Initial commit: diff against an empty tree object
     against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
 fi
+echo "=== against=$against"
+git diff-index --diff-filter=AM --name-only --cached $against | egrep '\.(pp|erb)'
+echo "=== XXXXXX"
 
-# Get list of new/modified manifest and template files
-  to check (in git index)
-for indexfile in 'git diff-index --diff-filter=AM --
-  name-only --cached $against | egrep '\.(pp|erb)''
+
+# Get list of new/modified manifest and template files to check (in git index)
+for indexfile in `git diff-index --diff-filter=AM --name-only --cached $against | egrep '\.(pp|erb)'`
 do
+    echo " ======> $indexfile"
     # Don't check empty files
     if [ 'git cat-file -s :0:$indexfile' -gt 0 ]
     then
         case $indexfile in
             *.pp )
                 # Check puppet manifest syntax
-                git cat-file blob :0:$indexfile | 
-                  puppet parser validate > $error_msg ;;
+                git cat-file blob :0:$indexfile | puppet parser validate > $error_msg ;;
             *.erb )
                 # Check ERB template syntax
-                git cat-file blob :0:$indexfile | 
-                  erb -x -T - | ruby -c 2> $error_msg >
-                    /dev/null ;;
+                git cat-file blob :0:$indexfile | erb -x -T - | ruby -c 2> $error_msg > /dev/null ;;
         esac
         if [ "$?" -ne 0 ]
         then
@@ -43,7 +46,6 @@ rm -f $error_msg
 
 if [ "$syntax_errors" -ne 0 ]
 then
-    echo "Error: $syntax_errors syntax errors found,
-      aborting commit."
+    echo "Error: $syntax_errors syntax errors found, aborting commit."
     exit 1
 fi
