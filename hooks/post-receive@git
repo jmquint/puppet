@@ -1,0 +1,4 @@
+#!/bin/sh
+
+ssh vagrant@puppet "cd /etc/puppetlabs/code/environments/production;git pull"
+
