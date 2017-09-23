@@ -1,4 +1,4 @@
-node 'git' {
+ node 'git' {
 
   file {'/tmp/it_works.txt':
     ensure  => present,
