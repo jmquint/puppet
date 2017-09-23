@@ -7,6 +7,6 @@ node 'git' {
     ensure  => present,
     mode    => '0644',
     content => "It works !\n",
-  }
+#  }
 
  }
