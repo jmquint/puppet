@@ -6,7 +6,7 @@
 # it wants to stop the commit.
 #
 # To enable this hook, rename this file to "pre-commit".
-echo "=== check_syntax.sh"
+echo "====== checking syntax"
 
 if git rev-parse --verify HEAD >/dev/null 2>&1
 then
@@ -16,37 +16,27 @@ else
         against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
 fi
 
-against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
+against=`git rev-parse --verify HEAD`
 
-echo "against=$against"
+echo "against git state $against"
 
 # If you want to allow non-ASCII filenames set this variable to true.
 allownonascii=$(git config --bool hooks.allownonascii)
-
-# Redirect output to stderr.
-exec 1>&2
-
-
-# If there are whitespace errors, print the offending file names and fail.
-exec git diff-index --check --cached $against --
 
 
 syntax_errors=0
 error_msg=$(mktemp /tmp/error_msg.XXXXXX)
 
-echo "=== against=$against"
+echo "   List of .pp or .erb files in the commit :"
 git diff-index --diff-filter=AM --name-only --cached $against | egrep '\.(pp|erb)'
-echo "=== XXXXXX"
-
-# aboting commit
-exit 1
+echo ""
 
 # Get list of new/modified manifest and template files to check (in git index)
 for indexfile in `git diff-index --diff-filter=AM --name-only --cached $against | egrep '\.(pp|erb)'`
 do
-    echo " ======> $indexfile"
+    echo "=== checking $indexfile"
     # Don't check empty files
-    if [ 'git cat-file -s :0:$indexfile' -gt 0 ]
+    if [ `git cat-file -s :0:$indexfile` -gt 0 ]
     then
         case $indexfile in
             *.pp )
@@ -60,7 +50,9 @@ do
         then
             echo -n "$indexfile: "
             cat $error_msg
-            syntax_errors='expr $syntax_errors + 1'
+            syntax_errors=`expr $syntax_errors + 1`
+        else
+            echo "Ok"
         fi
     fi
 done
