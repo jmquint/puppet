@@ -1,4 +1,6 @@
 #!/bin/sh
 
 ssh vagrant@puppet "cd /etc/puppetlabs/code/environments/production;git pull"
+cd /home/git/repos/puppet.git
+git push github master
 
