@@ -89,3 +89,10 @@ node 'no62' {
   class { 'firewall': }
 
 }
+
+node 'no64' {
+
+  include roles::webserver
+
+}
+
