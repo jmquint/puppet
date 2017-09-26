@@ -90,7 +90,7 @@ node 'no62' {
 
 }
 
-node 'no64' {
+node 'no64.home' {
 
   include roles::webserver
 
