@@ -4,14 +4,12 @@ class profiles::base {
   }
 
 class { '::mysql::server':
-  root_password           => 'root',
-  remove_default_accounts => true,
-  override_options => {
-    mysqld => {
-      log-error => '/var/log/mysqld.log',
-      pid-file  => '/var/run/mysqld/mysqld.pid',
-    },
-  }
+    root_password    =>'root',
+    override_options => {
+        'mysqld' => {
+            'max_connections'   =>'1024',
+        }       
+    }   
 }
 
 
