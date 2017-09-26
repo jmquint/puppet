@@ -4,7 +4,7 @@ class profiles::base {
   }
 
   class { '::mysql::server':
-    root_password    => 'strongpassword',
+    authentication_string    => 'strongpassword',
     override_options => { 'mysqld' => { 'max_connections' => '1024' } }
   }
 
