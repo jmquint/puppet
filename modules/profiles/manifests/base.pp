@@ -4,12 +4,6 @@ class profiles::base {
   }
 
 class { '::mysql::server':
-    root_password    =>'root',
-    override_options => {
-        'mysqld' => {
-            'max_connections'   =>'1024',
-        }       
-    }   
 }
 
 
