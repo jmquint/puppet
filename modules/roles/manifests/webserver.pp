@@ -1,4 +1,4 @@
 class roles::webserver {
   include profiles::apache
-#  include profiles::base
+  include profiles::base
 }
