@@ -94,9 +94,9 @@ node 'no64.home' {
 
   include roles::webserver
 
-  include user::virtual
-  include user::sysadmins
-  include user::developers
+  include users::virtual
+  include users::sysadmins
+  include users::developers
 
 }
 

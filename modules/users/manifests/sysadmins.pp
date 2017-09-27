@@ -1,3 +1,3 @@
-class user::sysadmins {
+class users::sysadmins {
   realize(User['jmquint'])
 }

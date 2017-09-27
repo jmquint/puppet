@@ -1,3 +1,3 @@
-class user::developers {
+class users::developers {
   realize(User['squint'])
 }
